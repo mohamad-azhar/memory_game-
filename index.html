@@ -1,11 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    
+
+    <main class="game-container">
+        <div>
+            <h1>Memory Game</h1>
+            <p>Vind alle gelijke kaarten.</p>
+        </div>
+
+        <section class="game-info">
+            <p>Zetten: <span id="moves">0</span></p>
+            <p> Tijd: <span id="timer">0</span></p>
+        </section>
+
+        <section class="game-board" id="game-board">
+            <!-- De kaarten worden later met JavaScript toegevoegd. -->
+        </section>
+
+        <button id="restart-button">
+            Opnieuw starten
+        </button>
+
+    </main>
+
+
+
+    <script src="script.js"></script>
 </body>
+
 </html>
