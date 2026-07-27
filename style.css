@@ -95,3 +95,8 @@ header p {
     background-color: #f3f4f6;
     border: 2px solid #7c3aed;
 }
+.card.matched {
+    background-color: #d1fae5;
+    border-color: #10b981;
+    cursor: default;
+}
