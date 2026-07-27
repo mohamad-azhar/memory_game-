@@ -18,6 +18,12 @@ const cardSymbols = [
     "🍓"
 ];
 
+let firstCard = null;
+let secondCard = null;
+let boardLocked = false;
+let moves = 0;
+
+
 function shuffleCards(cards){
     return cards.sort(function() {
         return Math.random() -0.5;
@@ -25,8 +31,66 @@ function shuffleCards(cards){
 }
 
 function flipCard(card) { 
+    if (boardLocked) {
+        return;
+    }
+    if (card === firstCard) {
+        return;
+    }
+
     card.textContent = card.dataset.symbol;
     card.classList.add("flipped");
+
+    if (card === firstCard) {
+        return;
+    }
+
+    secondCard = card;
+    moves++;
+    movesElement.textContent = moves;
+
+    checkForMatch();
+}
+
+function checkForMatch() {
+    const cardsMatch = 
+    firstCard.dataset.symbol === secondCard.dataset.symbol;
+    
+    if (cardsMatch) {
+        disableMatchedCards();
+    } else {
+        hideCardsAgain();
+    }
+}
+
+function disableMatchedCards() {
+    firstCard.disabled = true;
+    secondCard.disabled = true;
+
+    firstCard.classList.add("matched");
+    secondCard.classList.add("matched");
+    
+    resetSelectedBoard();
+}
+
+function hideCardsAgain() {
+    boardLocked = true;
+    
+    setTimeout(function() {
+        firstCard.textContent = "?";
+        secondCard.textContent = "?";
+
+        firstCard.classList.remove("flipped");
+        secondCard.classList.remove("flipped");
+
+        resetSelectedBoard();
+    }, 1000);
+}
+
+function resetSelectedBoard() {
+    firstCard = null;
+    secondCard = null;
+    boardLocked = false;
 }
 
 function createGameBoard() {
@@ -50,9 +114,13 @@ function createGameBoard() {
 }
 
 function restartGame() {
+    moves = 0;
     movesElement.textContent = "0";
     timerElement.textContent = "0";
 
+    firstCard = null;
+    secondCard = null;
+    boardLocked = false;
     createGameBoard();
 }
 
