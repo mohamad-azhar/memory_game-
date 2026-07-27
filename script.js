@@ -24,6 +24,11 @@ function shuffleCards(cards){
     });
 }
 
+function flipCard(card) { 
+    card.textContent = card.dataset.symbol;
+    card.classList.add("flipped");
+}
+
 function createGameBoard() {
     gameBoard.innerHTML = "";
 
@@ -37,6 +42,9 @@ function createGameBoard() {
         card.dataset.symbol = symbol;
         card.textContent = "?";
 
+        card.addEventListener("click", function() {
+            flipCard(card);
+        });
         gameBoard.appendChild(card);
     });
 }
@@ -50,7 +58,12 @@ function restartGame() {
 
 
 
-restartButton.addEventListener("click", restartGame);
+restartButton.addEventListener("click", function(){
+    movesElement.textContent = "0";
+    timerElement.textContent = "0:00";
+
+    console.log("Het spel werd opnieuw gestart!");
+});
 
 
 createGameBoard();
