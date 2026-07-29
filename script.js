@@ -22,6 +22,7 @@ let firstCard = null;
 let secondCard = null;
 let boardLocked = false;
 let moves = 0;
+let matchedPairs = 0;
 
 function shuffleCards(cards) {
     return cards.sort(function () {
@@ -71,8 +72,19 @@ function disableMatchedCards() {
 
     firstCard.classList.add("matched");
     secondCard.classList.add("matched");
+    matchedPairs++;
 
+    if (matchedPairs === cardSymbols.length / 2) {
+        showWinMessage();
+    }
     resetSelectedCards();
+}
+function showWinMessage() {
+    boardLocked = true;
+
+    setTimeout(function () {
+        alert("Proficiat! Je hebt gewonnen in " + moves + " zetten.");
+    }, 300);
 }
 
 function hideCardsAgain() {
@@ -118,6 +130,8 @@ function createGameBoard() {
 
 function restartGame() {
     moves = 0;
+    matchedPairs = 0;
+    
     movesElement.textContent = "0";
     timerElement.textContent = "0";
 
