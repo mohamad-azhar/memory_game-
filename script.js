@@ -5,7 +5,7 @@ const movesElement = document.querySelector("#moves");
 const timerElement = document.querySelector("#timer");
 const restartButton = document.querySelector("#restart-button");
 
-console.log("Memory Game is correct geladen:)");
+console.log("Memory Game is correct geladen :)");
 
 const cardSymbols = [
     "🍎",
@@ -23,17 +23,17 @@ let secondCard = null;
 let boardLocked = false;
 let moves = 0;
 
-
-function shuffleCards(cards){
-    return cards.sort(function() {
-        return Math.random() -0.5;
+function shuffleCards(cards) {
+    return cards.sort(function () {
+        return Math.random() - 0.5;
     });
 }
 
-function flipCard(card) { 
+function flipCard(card) {
     if (boardLocked) {
         return;
     }
+
     if (card === firstCard) {
         return;
     }
@@ -41,11 +41,13 @@ function flipCard(card) {
     card.textContent = card.dataset.symbol;
     card.classList.add("flipped");
 
-    if (card === firstCard) {
+    if (firstCard === null) {
+        firstCard = card;
         return;
     }
 
     secondCard = card;
+
     moves++;
     movesElement.textContent = moves;
 
@@ -53,9 +55,9 @@ function flipCard(card) {
 }
 
 function checkForMatch() {
-    const cardsMatch = 
-    firstCard.dataset.symbol === secondCard.dataset.symbol;
-    
+    const cardsMatch =
+        firstCard.dataset.symbol === secondCard.dataset.symbol;
+
     if (cardsMatch) {
         disableMatchedCards();
     } else {
@@ -69,25 +71,25 @@ function disableMatchedCards() {
 
     firstCard.classList.add("matched");
     secondCard.classList.add("matched");
-    
-    resetSelectedBoard();
+
+    resetSelectedCards();
 }
 
 function hideCardsAgain() {
     boardLocked = true;
-    
-    setTimeout(function() {
+
+    setTimeout(function () {
         firstCard.textContent = "?";
         secondCard.textContent = "?";
 
         firstCard.classList.remove("flipped");
         secondCard.classList.remove("flipped");
 
-        resetSelectedBoard();
+        resetSelectedCards();
     }, 1000);
 }
 
-function resetSelectedBoard() {
+function resetSelectedCards() {
     firstCard = null;
     secondCard = null;
     boardLocked = false;
@@ -106,9 +108,10 @@ function createGameBoard() {
         card.dataset.symbol = symbol;
         card.textContent = "?";
 
-        card.addEventListener("click", function() {
+        card.addEventListener("click", function () {
             flipCard(card);
         });
+
         gameBoard.appendChild(card);
     });
 }
@@ -121,17 +124,12 @@ function restartGame() {
     firstCard = null;
     secondCard = null;
     boardLocked = false;
+
     createGameBoard();
-}
-
-
-
-restartButton.addEventListener("click", function(){
-    movesElement.textContent = "0";
-    timerElement.textContent = "0:00";
 
     console.log("Het spel werd opnieuw gestart!");
-});
+}
 
+restartButton.addEventListener("click", restartGame);
 
 createGameBoard();
