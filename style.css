@@ -30,8 +30,8 @@ body {
 /* Hoofdcontainer */
 
 .game-container {
-    width: 100%;
-    max-width: 950px;
+    width: fit-content;
+    max-width: 100%;
 
     padding: 30px;
 
