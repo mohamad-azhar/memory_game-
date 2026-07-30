@@ -10,6 +10,8 @@
 
 <body>
 
+
+
     <main class="game-container">
         <div>
             <h1>Memory Game</h1>
@@ -19,6 +21,17 @@
         <section class="game-info">
             <p>Zetten: <span id="moves">0</span></p>
             <p> Tijd: <span id="timer">0</span></p>
+        </section>
+
+        <section class="difficulty-section">
+            <label for="difficulty">Moeilijkheid:</label>
+
+            <select id="difficulty">
+                <option value="4">Makkelijk — 4 paren</option>
+                <option value="6" selected>Normaal — 6 paren</option>
+                <option value="10">Moeilijk — 10 paren</option>
+                <option value="14">Extreem moeilijk — 14 paren</option>
+            </select>
         </section>
 
         <section class="game-board" id="game-board">
