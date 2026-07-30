@@ -153,8 +153,6 @@ function flipCard(card) {
     moves++;
     movesElement.textContent = moves;
 
-    card.textContent = card.dataset.symbol;
-    card.classList.add("flipped");
 
     
     checkForMatch();
