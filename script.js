@@ -15,7 +15,11 @@ const closePopupButton = document.querySelector("#close-popup");
 const difficultySelect = document.querySelector("#difficulty");
 const bestScoreElement = document.querySelector("#best-score");
 
-console.log("Memory Game is correct geladen :)");
+const flipSound = new Audio("sound/flip.mp3");
+const matchSound = new Audio("sound/match.mp3");
+const winSound = new Audio("sound/victory.mp3");
+
+
 
 const allSymbols = [
     "🍎",
@@ -75,6 +79,17 @@ function updateBoardLayout() {
         gameBoard.classList.add("extreme");
     }
 }
+function playSound(sound) {
+    const soundClone = sound.cloneNode();
+
+    soundClone.volume = sound.volume;
+
+    soundClone.play().catch(function () {
+        console.log("Het geluid kon niet worden afgespeeld.");
+    });
+}
+
+
 function getBestScoreKey() {
     return "memory-best-score-" + difficultySelect.value;
 }
@@ -120,13 +135,14 @@ function flipCard(card) {
         return;
     }
     if (!gameStarted) {
-    gameStarted = true;
-    startTimer();
-}
+        gameStarted = true;
+        startTimer();
+    }
 
     card.textContent = card.dataset.symbol;
     card.classList.add("flipped");
 
+    playSound(flipSound);
     if (firstCard === null) {
         firstCard = card;
         return;
@@ -137,6 +153,10 @@ function flipCard(card) {
     moves++;
     movesElement.textContent = moves;
 
+    card.textContent = card.dataset.symbol;
+    card.classList.add("flipped");
+
+    
     checkForMatch();
 }
 
@@ -157,11 +177,15 @@ function disableMatchedCards() {
 
     firstCard.classList.add("matched");
     secondCard.classList.add("matched");
+
+    playSound(matchSound);
+
     matchedPairs++;
 
     if (matchedPairs === cardSymbols.length / 2) {
         showWinMessage();
     }
+
     resetSelectedCards();
 }
 function showWinMessage() {
@@ -177,6 +201,7 @@ function showWinMessage() {
     setTimeout(function () {
         winPopup.classList.remove("hidden");
     }, 300);
+    playSound(winSound);
 }
 function closeWinPopup() {
     winPopup.classList.add("hidden");
@@ -185,12 +210,18 @@ function closeWinPopup() {
 function hideCardsAgain() {
     boardLocked = true;
 
+    firstCard.classList.add("wrong");
+    secondCard.classList.add("wrong");
+
     setTimeout(function () {
         firstCard.textContent = "?";
         secondCard.textContent = "?";
 
         firstCard.classList.remove("flipped");
         secondCard.classList.remove("flipped");
+
+        firstCard.classList.remove("wrong");
+        secondCard.classList.remove("wrong");
 
         resetSelectedCards();
     }, 1000);
@@ -244,7 +275,7 @@ function restartGame() {
     closeWinPopup();
     createGameBoard();
     loadBestScore();
-    
+
 
     console.log("Het spel werd opnieuw gestart!");
 }
