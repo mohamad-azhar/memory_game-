@@ -13,6 +13,7 @@ const playAgainButton = document.querySelector("#play-again-button");
 const closePopupButton = document.querySelector("#close-popup");
 
 const difficultySelect = document.querySelector("#difficulty");
+const bestScoreElement = document.querySelector("#best-score");
 
 console.log("Memory Game is correct geladen :)");
 
@@ -73,6 +74,29 @@ function updateBoardLayout() {
     } else if (numberOfPairs === 14) {
         gameBoard.classList.add("extreme");
     }
+}
+function getBestScoreKey() {
+    return "memory-best-score-" + difficultySelect.value;
+}
+
+function loadBestScore() {
+    const savedBestScore = localStorage.getItem(getBestScoreKey());
+
+    if (savedBestScore === null) {
+        bestScoreElement.textContent = "-";
+    } else {
+        bestScoreElement.textContent = savedBestScore + " zetten";
+    }
+}
+
+function saveBestScore() {
+    const savedBestScore = localStorage.getItem(getBestScoreKey());
+
+    if (savedBestScore === null || moves < Number(savedBestScore)) {
+        localStorage.setItem(getBestScoreKey(), moves);
+    }
+
+    loadBestScore();
 }
 
 function shuffleCards(cards) {
@@ -144,6 +168,8 @@ function showWinMessage() {
     boardLocked = true;
 
     clearInterval(timerInterval);
+
+    saveBestScore();
 
     finalMovesElement.textContent = moves;
     finalTimeElement.textContent = timer + " seconden";
@@ -217,6 +243,7 @@ function restartGame() {
 
     closeWinPopup();
     createGameBoard();
+    loadBestScore();
     
 
     console.log("Het spel werd opnieuw gestart!");
@@ -232,3 +259,4 @@ closePopupButton.addEventListener("click", function () {
 difficultySelect.addEventListener("change", restartGame);
 
 createGameBoard();
+loadBestScore();
