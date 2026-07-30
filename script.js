@@ -5,6 +5,13 @@ const movesElement = document.querySelector("#moves");
 const timerElement = document.querySelector("#timer");
 const restartButton = document.querySelector("#restart-button");
 
+
+const winPopup = document.querySelector("#win-popup");
+const finalMovesElement = document.querySelector("#final-moves");
+const finalTimeElement = document.querySelector("#final-time");
+const playAgainButton = document.querySelector("#play-again-button");
+const closePopupButton = document.querySelector("#close-popup");
+
 console.log("Memory Game is correct geladen :)");
 
 const cardSymbols = [
@@ -97,13 +104,15 @@ function showWinMessage() {
 
     clearInterval(timerInterval);
 
+    finalMovesElement.textContent = moves;
+    finalTimeElement.textContent = timer + " seconden";
+
     setTimeout(function () {
-        alert(
-            "Proficiat!\n\n" +
-            "Zetten: " + moves +
-            "\nTijd: " + timer + " seconden"
-        );
+        winPopup.classList.remove("hidden");
     }, 300);
+}
+function closeWinPopup() {
+    winPopup.classList.add("hidden");
 }
 
 function hideCardsAgain() {
@@ -163,11 +172,18 @@ function restartGame() {
     secondCard = null;
     boardLocked = false;
 
+    closeWinPopup();
     createGameBoard();
+    
 
     console.log("Het spel werd opnieuw gestart!");
 }
 
 restartButton.addEventListener("click", restartGame);
+playAgainButton.addEventListener("click", restartGame);
+
+closePopupButton.addEventListener("click", function () {
+    closeWinPopup();
+});
 
 createGameBoard();
