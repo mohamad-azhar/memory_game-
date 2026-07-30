@@ -23,11 +23,20 @@ let secondCard = null;
 let boardLocked = false;
 let moves = 0;
 let matchedPairs = 0;
+let timer = 0;
+let timerInterval = null;
+let gameStarted = false;
 
 function shuffleCards(cards) {
     return cards.sort(function () {
         return Math.random() - 0.5;
     });
+}
+function startTimer() {
+    timerInterval = setInterval(function () {
+        timer++;
+        timerElement.textContent = timer;
+    }, 1000);
 }
 
 function flipCard(card) {
@@ -38,6 +47,10 @@ function flipCard(card) {
     if (card === firstCard) {
         return;
     }
+    if (!gameStarted) {
+    gameStarted = true;
+    startTimer();
+}
 
     card.textContent = card.dataset.symbol;
     card.classList.add("flipped");
@@ -82,8 +95,14 @@ function disableMatchedCards() {
 function showWinMessage() {
     boardLocked = true;
 
+    clearInterval(timerInterval);
+
     setTimeout(function () {
-        alert("Proficiat! Je hebt gewonnen in " + moves + " zetten.");
+        alert(
+            "Proficiat!\n\n" +
+            "Zetten: " + moves +
+            "\nTijd: " + timer + " seconden"
+        );
     }, 300);
 }
 
@@ -129,11 +148,16 @@ function createGameBoard() {
 }
 
 function restartGame() {
+    clearInterval(timerInterval);
+
+    timer = 0;
     moves = 0;
     matchedPairs = 0;
-    
-    movesElement.textContent = "0";
+
+    gameStarted = false;
+
     timerElement.textContent = "0";
+    movesElement.textContent = "0";
 
     firstCard = null;
     secondCard = null;
