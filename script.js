@@ -12,18 +12,30 @@ const finalTimeElement = document.querySelector("#final-time");
 const playAgainButton = document.querySelector("#play-again-button");
 const closePopupButton = document.querySelector("#close-popup");
 
+const difficultySelect = document.querySelector("#difficulty");
+
 console.log("Memory Game is correct geladen :)");
 
-const cardSymbols = [
+const allSymbols = [
     "🍎",
     "🍌",
     "🍇",
     "🍓",
-    "🍎",
-    "🍌",
-    "🍇",
-    "🍓"
+    "🍉",
+    "🍒",
+    "🍍",
+    "🥝",
+    "🍑",
+    "🥥",
+    "🍋",
+    "🍐",
+    "🥭",
+    "🍊",
+    "🫐",
+    "🍈"
 ];
+
+let cardSymbols = [];
 
 let firstCard = null;
 let secondCard = null;
@@ -33,6 +45,35 @@ let matchedPairs = 0;
 let timer = 0;
 let timerInterval = null;
 let gameStarted = false;
+
+function createCardSymbols() {
+    const numberOfPairs = Number(difficultySelect.value);
+
+    const selectedSymbols = allSymbols.slice(0, numberOfPairs);
+
+    cardSymbols = [...selectedSymbols, ...selectedSymbols];
+}
+
+function updateBoardLayout() {
+    const numberOfPairs = Number(difficultySelect.value);
+
+    gameBoard.classList.remove(
+        "easy",
+        "normal",
+        "hard",
+        "extreme"
+    );
+
+    if (numberOfPairs === 4) {
+        gameBoard.classList.add("easy");
+    } else if (numberOfPairs === 6) {
+        gameBoard.classList.add("normal");
+    } else if (numberOfPairs === 10) {
+        gameBoard.classList.add("hard");
+    } else if (numberOfPairs === 14) {
+        gameBoard.classList.add("extreme");
+    }
+}
 
 function shuffleCards(cards) {
     return cards.sort(function () {
@@ -138,6 +179,9 @@ function resetSelectedCards() {
 function createGameBoard() {
     gameBoard.innerHTML = "";
 
+    createCardSymbols();
+    updateBoardLayout();
+
     const shuffledCards = shuffleCards([...cardSymbols]);
 
     shuffledCards.forEach(function (symbol) {
@@ -155,7 +199,6 @@ function createGameBoard() {
         gameBoard.appendChild(card);
     });
 }
-
 function restartGame() {
     clearInterval(timerInterval);
 
@@ -185,5 +228,7 @@ playAgainButton.addEventListener("click", restartGame);
 closePopupButton.addEventListener("click", function () {
     closeWinPopup();
 });
+
+difficultySelect.addEventListener("change", restartGame);
 
 createGameBoard();
